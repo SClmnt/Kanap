@@ -6,7 +6,7 @@ fetch ("http://localhost:3001/api/products")
     })
     .then(function(value){
         console.log(value);
-        products(value);
+        productsList(value);
     })
     
     .catch(function(err){
@@ -16,7 +16,7 @@ fetch ("http://localhost:3001/api/products")
 
 const productIndex = document.getElementById("items");
 
-function products(data){
+function productsList(data){
     
     for ( let i = 0; i < data.length; i++){
         productIndex.innerHTML += `<a href="./product.html?id=${data[i]._id}">
