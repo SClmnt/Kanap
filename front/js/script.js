@@ -1,3 +1,5 @@
+//Requête GET de l'API
+
 fetch ("http://localhost:3001/api/products")
     .then(function(res){
         if(res.ok)  {
@@ -13,11 +15,14 @@ fetch ("http://localhost:3001/api/products")
 
     });
 
+//Catalogue de la page d'accueil
 
 const productIndex = document.getElementById("items");
 
 function productsList(data){
     
+    //Ajout auto. des produits
+
     for ( let i = 0; i < data.length; i++){
         productIndex.innerHTML += `<a href="./product.html?id=${data[i]._id}">
         <article>
