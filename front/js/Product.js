@@ -1,9 +1,9 @@
-
+//Récupération de l'id dans l'url
     var currentUrl = window.location.href;
     var url = new URL(currentUrl);
     var urlId = url.searchParams.get("id");
 
-
+//Requête GET de l'API produit
 /*http://localhost:3001/api/products/${urlId}*/
 
 fetch (`http://localhost:3001/api/products/${urlId}`)
@@ -24,13 +24,15 @@ fetch (`http://localhost:3001/api/products/${urlId}`)
 
     });
 
-function productFill (data){
-    let title = document.querySelector("title");
-    let productImg = document.getElementsByClassName("item__img");
-    let productName = document.getElementById("title");
-    let productPrice = document.getElementById("price");
-    let productDescription = document.getElementById("description");
+//Remplissage auto de la fiche produit
+    
+    const title = document.querySelector("title");
+    const productImg = document.getElementsByClassName("item__img");
+    const productName = document.getElementById("title");
+    const productPrice = document.getElementById("price");
+    const productDescription = document.getElementById("description");
 
+function productFill (data){
 
     title.innerText = `${data.name}`;
     productImg[0].innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
@@ -40,10 +42,22 @@ function productFill (data){
    
 };
 
+//Remplissage de la catégorie Couleurs
+
 function colors(data){
     let productColors = document.getElementById("colors");
     
     for (i = 0; i < data.colors.length; i++){
     productColors.innerHTML +=`<option value="${data.colors[i]}">${data.colors[i]}</option>`;
-    console.log(productColors);}
+    }
 };
+
+//Ajout des produits au panier
+
+const addBtn = document.getElementById("addToCart");
+const productQuantity = document.getElementById("quantity")
+
+addBtn.addEventListener('click', function(addToLocalStorage){
+    
+    console.log(productQuantity.value);
+});
