@@ -55,9 +55,70 @@ function colors(data){
 //Ajout des produits au panier
 
 const addBtn = document.getElementById("addToCart");
-const productQuantity = document.getElementById("quantity")
 
-addBtn.addEventListener('click', function(addToLocalStorage){
+/*function productFound(){
+    let productQuantity = document.getElementById("quantity").value;
+    let productColor = document.getElementById("colors").value;
+    let cart = JSON.parse(localStorage.getItem("cart"));
+    let product = {
+            id : urlId,
+            color : productColor,
+            quantity : productQuantity,
+        };
+    console.log(cart);
+    if(null === cart){
+        cart = [];
+    }
     
-    console.log(productQuantity.value);
+    return undefined !== cart.find(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0)
+
+    let productIdFound = undefined !== cart.find(cartProduct => cartProduct.id === product.id);
+    let productColorFound = undefined !== cart.find(cartProduct => cartProduct.color === product.color);
+    let productQuantityFound = undefined !== cart.find(cartProduct => cartProduct.quantity > 0);
+    return productIdFound && productColorFound && productQuantityFound;
+    if(productIdFound && productColorFound && productQuantityFound ){
+        console.log("déjà-la");
+        return true;
+        
+    }else{
+        console.log("pas vu");
+        return false;        
+    };
+};*/
+
+addBtn.addEventListener('click', function(addToCart){{
+        let productQuantity = parseInt(document.getElementById("quantity").value);
+        let productColor = document.getElementById("colors").value;
+        let cart = JSON.parse(localStorage.getItem("cart"));
+        
+
+        if(null === cart){
+            cart = [];
+        }
+        
+        let product = {
+                id : urlId,
+                color : productColor,
+                quantity : productQuantity,
+        };
+
+
+        if(productQuantity > 0 && undefined !== cart.find(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0)){
+            console.log("déja la");
+            let cartProductIndex = cart.findIndex(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0);
+            cart[cartProductIndex].quantity+=product.quantity; 
+        }else{
+            console.log("new item");
+            cart.quantity = product.quantity;
+            cart.push(product);  
+        }
+        
+        localStorage.setItem("cart",JSON.stringify(cart));      
+           
+        
+        
+        
+        
+    }
+
 });
