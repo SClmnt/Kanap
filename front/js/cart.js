@@ -14,10 +14,12 @@ fetch ("http://localhost:3001/api/products")
     .catch(function(err){
     });
 
+//Sauvegarde du panier
 function saveCart(cart){
     localStorage.setItem("cart",JSON.stringify(cart));
 };
 
+//Récupération du panier dans le localStorage
 function getCart(){
     let cart = localStorage.getItem("cart");
     if(cart === null){
@@ -27,23 +29,21 @@ function getCart(){
     }
 };
 
-function getData(data){
-    JSON.stringify(data);   
+function removeFromCart(product){
+  let cart = getCart();
+  cart = cart.filter(p => p.id != product.id && p.color != product.color);
+  saveCart(cart);
 }
 
+//Remplissage de la page panier
 const cartIndex = document.getElementById("cart__items");
-
-function productFound(data){
-    let cart = getCart();
-    cart.find(product => product.id === data[0,7].id);
-    
-};
+const totalQuantity = document.getElementById("totalQuantity");
 
 function cartFill(){
     let cart = getCart();
-    
+    var cartTotal = 0;
+    var priceTotal = 0;    
     for (let i = 0; i < cart.length; i++){
-
         fetch(`http://localhost:3001/api/products/${cart[i].id}`)
         .then(function(res) {
           if (res.ok) {
@@ -53,11 +53,12 @@ function cartFill(){
         .then(function(value) {
           console.log(value);
           productData(value);
+          productPriceQuantity(value);
         })
         .catch(function(err) {          
         });
 
-        function productData(data){
+      function productData(data){
         
         console.log("produit ajouté");
         cartIndex.innerHTML += `<article class="cart__item" data-id="${cart[i].id}" data-color="${cart[i].color}">
@@ -80,7 +81,32 @@ function cartFill(){
             </div>
           </div>
         </div>
-      </article>`};
-    }
+      </article>`
+    console.log(totalProductPrice)
+    };
+    function productPriceQuantity(data){
+      var numberQuantity = Number(`${cart[i].quantity}`);
+      var totalProductPrice = `${data.price}`* numberQuantity;
+      priceTotal += totalProductPrice;
+      console.log(priceTotal);
+    };
+      var numberQuantity = Number(`${cart[i].quantity}`);
+      cartTotal += numberQuantity;
+      
+    };    
+    
+    totalQuantity.innerHTML = cartTotal;
 };
 
+
+function changeQuantity(product, quantity){
+  let cart = getCart();
+  let cartHtmlQuantity = document.getElementsByClassName("itemQuantity");
+  let matchingItem = cart.find(p => p.id === product.id && p.color === product.color);
+  if (matchingItem != undefined) {
+    cart.quantity = cartHtmlQuantity.value;
+  }
+  saveCart(cart);
+};
+
+//Calcul du prix
