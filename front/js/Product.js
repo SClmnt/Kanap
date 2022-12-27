@@ -4,9 +4,9 @@
     var urlId = url.searchParams.get("id");
 
 ////Requête GET de l'API produit
-/*http://localhost:3001/api/products/${urlId}*/
+/*http://localhost:3000/api/products/${urlId}*/
 
-fetch (`http://localhost:3001/api/products/${urlId}`)
+fetch (`http://localhost:3000/api/products/${urlId}`)
     .then(function(res){
         if(res.ok)  {
             return res.json();

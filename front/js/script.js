@@ -1,6 +1,6 @@
 //Requête GET de l'API
 
-fetch ("http://localhost:3001/api/products")
+fetch ("http://localhost:3000/api/products")
     .then(function(res){
         if(res.ok)  {
             return res.json();
