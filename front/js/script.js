@@ -33,14 +33,3 @@ function productsList(data){
         </a>`;
     };
 }
-
-
-
-
-
-
-
-
-
-
-

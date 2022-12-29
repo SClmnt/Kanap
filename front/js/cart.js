@@ -1,4 +1,5 @@
-////Requête GET de l'API
+//Requête GET de l'API
+
 fetch ("http://localhost:3000/api/products")
     .then(function(res){
         if(res.ok)  {
@@ -15,11 +16,13 @@ fetch ("http://localhost:3000/api/products")
     });
 
 //Sauvegarde du panier
+
 function saveCart(cart){
     localStorage.setItem("cart",JSON.stringify(cart));
 };
 
 //Récupération du panier dans le localStorage
+
 function getCart(){
     let cart = localStorage.getItem("cart");
     if(cart === null){
@@ -39,6 +42,7 @@ function removeFromCart(product){
 }
 
 //Remplissage de la page panier
+
 const cartIndex = document.getElementById("cart__items");
 const totalQuantity = document.getElementById("totalQuantity");
 const totalCartPrice = document.getElementById("totalPrice");
@@ -57,6 +61,7 @@ function cartFill(){
         })
         .then(function(value) {
           productData(cart[i], value);
+
           //Calcul de la quantité
           let numberQuantity = Number(`${cart[i].quantity}`);
           cartTotal += numberQuantity;
@@ -70,6 +75,8 @@ function cartFill(){
         });
     };  
 };
+
+//Insertion des caracteristiques produit 
 
 function productData(product, data){ 
   console.log("produit ajouté");
@@ -98,6 +105,8 @@ function productData(product, data){
   addOnRemoveEventFromQuantity();
 };
 
+//Fonction de changement de la quantité
+
 function addOnChangeEventToInputQuantity(item)
 {
   document.querySelectorAll('input[name="itemQuantity"]').forEach(item => {
@@ -110,12 +119,13 @@ function addOnChangeEventToInputQuantity(item)
         },
         Number(event.target.value)
       );
-      //TODO : Mettre a jour la quantity pour le produit spécifique dans le localStorage grace a la valeur de data-id (indice: voir pour récupérer les parents vu que le data id est sur article et que l'on est plus bas sur l'input)
       refreshCartQuantity();
       refreshCartPrice();
     })
   });
 }
+
+//Bouton supprimer
 
 function addOnRemoveEventFromQuantity(item)
 {
@@ -128,12 +138,13 @@ function addOnRemoveEventFromQuantity(item)
           'color': event.target.closest('.cart__item').dataset.color
         }
       );
-      //TODO : Mettre a jour la quantity pour le produit spécifique dans le localStorage grace a la valeur de data-id (indice: voir pour récupérer les parents vu que le data id est sur article et que l'on est plus bas sur l'input)
       refreshCartQuantity();
       refreshCartPrice();
     })
   });
 };
+
+//Rafraichissement de la quantite et du prix du panier
 
 function refreshCartQuantity()
 {
@@ -161,7 +172,6 @@ function refreshCartPrice()
       }
     })
     .then(function(value) {
-      //Calcul du prix
       let numberQuantity = Number(`${cart[i].quantity}`);
       let totalProductPrice = Number (`${value.price}`)* numberQuantity;
       priceTotal += totalProductPrice;
@@ -172,7 +182,8 @@ function refreshCartPrice()
   };
 };
 
-//console.log(cartHtmlQuantity);
+//Changement de la quantité de la page panier
+
 function changeQuantity(product, quantity){
   let cart = getCart();
   let foundProduct = cart.find(p => p.id === product.id && p.color === product.color);
@@ -220,18 +231,74 @@ orderBtn.addEventListener('click', function(event){
   });
 });
 
+//Verification des donnees envoyees
+
+const formFirstName = document.getElementById("firstName");
+const formLastName = document.getElementById("lastName");
+const formAddress = document.getElementById("address");
+const formCity = document.getElementById("city");
+const formEmail = document.getElementById("email");
+
+const searchNumber = /[0-9]/;
+const startWithNumber = /^[0-9]/;
+const searchMail = /[@]/
+
+formFirstName.addEventListener('change', function(e){
+  var value = e.target.value;
+  if(searchNumber.test(value)){
+    document.getElementById("firstNameErrorMsg").textContent = "Les chiffres ne sont pas autorisé dans ce champ!";
+  }else{
+    document.getElementById("firstNameErrorMsg").textContent ="";
+  }
+});
+
+formLastName.addEventListener('change', function(e){
+  var value = e.target.value;
+  if(searchNumber.test(value)){
+    document.getElementById("lastNameErrorMsg").textContent = "Les chiffres ne sont pas autorisé dans ce champ!";
+  }else{
+    document.getElementById("lastNameErrorMsg").textContent ="";
+  }
+});
+
+formAddress.addEventListener('change', function(e){
+  var value = e.target.value;
+  if(startWithNumber.test(value)){
+    document.getElementById("addressErrorMsg").textContent = "";
+  }else{
+    document.getElementById("addressErrorMsg").textContent ="N'oubliez pas le numéro de la rue!";
+  }
+});
+
+formCity.addEventListener('change', function(e){
+  var value = e.target.value;
+  if(searchNumber.test(value)){
+    document.getElementById("cityErrorMsg").textContent = "Les chiffres ne sont pas autorisé dans ce champ!";
+  }else{
+    document.getElementById("cityErrorMsg").textContent ="";
+  }
+});
+
+formEmail.addEventListener('change', function(e){
+  var value = e.target.value;
+  if(searchMail.test(value)){
+    document.getElementById("emailErrorMsg").textContent = "";
+  }else{
+    document.getElementById("emailErrorMsg").textContent ="Ce format d'adresse mail n'est pas valide, il manque le @!";
+  }
+});
+
+//Objet coordonees client
+
 function getCustomerData(){
-  //let form = document.querySelector('form.cart__order');
   let logIn = {};
-  document.querySelectorAll('.cart__order__form__question input[type="text"],.cart__order__form__question input[type="email"]').forEach(item => {
-    
-    logIn[item.name] = item.value;
-    
-    
+  document.querySelectorAll('.cart__order__form__question input[type="text"],.cart__order__form__question input[type="email"]').forEach(item => 
+    {logIn[item.name] = item.value;
   });
-  //console.log(logIn);
   return logIn;
 };
+
+//Tableau contenu du panier
 
 function productArray(){
   let cart = getCart();
@@ -239,7 +306,3 @@ function productArray(){
   cart.map(product => cartArray.push(product.id));
   return cartArray;
 };
-
-console.log(productArray());
-
-
