@@ -18,6 +18,16 @@ fetch (`http://localhost:3000/api/products/${urlId}`)
     .catch(function(err){
     });
 
+
+function getCart(){
+    let cart = localStorage.getItem("cart");
+    if(cart === null){
+        return [];
+    }else{
+        return JSON.parse(cart);
+    }
+};
+
 //Remplissage auto de la fiche produit
     
 const title = document.querySelector("title");
@@ -55,8 +65,13 @@ const addBtn = document.getElementById("addToCart");
 addBtn.addEventListener('click', function(){{
         let productQuantity = parseInt(document.getElementById("quantity").value);
         let productColor = document.getElementById("colors").value;
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        
+        if (productColor.length === 0){
+            alert("Veuillez choisir une couleur.");
+
+            return null;
+        }
+        let cart = getCart();
+        console.log(productColor)
         if(null === cart){
             cart = [];
         }        
@@ -66,12 +81,12 @@ addBtn.addEventListener('click', function(){{
                 quantity : productQuantity,
         };
 
-        if(productQuantity > 0 && undefined !== cart.find(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0)){
+        if(productQuantity > 0  && undefined !== cart.find(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0)){
             console.log("added to cart");
             let cartProductIndex = cart.findIndex(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0);
             cart[cartProductIndex].quantity+=product.quantity;
         }else if(productQuantity <= 0){
-            cart = cart.filter(c => c.id != cart.id);
+            cart = cart.filter(c => c.id != cart.id && c.color != cart.color);
         }else{
             console.log("new item");
             cart.quantity = product.quantity;
