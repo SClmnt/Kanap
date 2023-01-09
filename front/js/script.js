@@ -13,12 +13,15 @@ fetch ("http://localhost:3000/api/products")
     
     .catch(function(err){
 
-    });
+});
 
 //Catalogue de la page d'accueil
 
 const productIndex = document.getElementById("items");
-
+/**
+ * Récupère les données dans l'API et remplit le catalogue des produits
+ * @param {string} data 
+ */
 function productsList(data){
     
     //Ajout auto. des produits

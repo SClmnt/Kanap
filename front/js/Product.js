@@ -16,9 +16,12 @@ fetch (`http://localhost:3000/api/products/${urlId}`)
         colors(value);
     })    
     .catch(function(err){
-    });
+});
 
-
+/**
+ * Récupération du tableau dans l'API
+ * @returns {array} cart
+ */
 function getCart(){
     let cart = localStorage.getItem("cart");
     if(cart === null){
@@ -35,7 +38,10 @@ const productImg = document.getElementsByClassName("item__img");
 const productName = document.getElementById("title");
 const productPrice = document.getElementById("price");
 const productDescription = document.getElementById("description");
-
+/**
+ * Récupère les données dans l'API et remplit la fiche produit
+ * @param {(string | number)} data 
+ */
 function productFill (data){
     title.innerText = `${data.name}`;
     productImg[0].innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
@@ -45,7 +51,10 @@ function productFill (data){
 };
 
 //Remplissage de la catégorie Couleurs
-
+/**
+ * Récupère les couleurs disponibles pour le produit
+ * @param {string} data 
+ */
 function colors(data){
     let productColors = document.getElementById("colors");
     
@@ -55,12 +64,21 @@ function colors(data){
 };
 
 //Ajout des produits au panier
-    
+/**
+ * Récupère le tableau du localStorage
+ * @param {array} cart 
+ */    
 function saveCart(cart){
     localStorage.setItem("cart",JSON.stringify(cart));
 }
     
-
+/**
+ * Récolte les données à ajouter au loalStorage
+ * @param {number} productQuantity
+ * @param {string} productColor
+ * @param {string} urlId
+ * @returns {object} product
+ */
 const addBtn = document.getElementById("addToCart");
 addBtn.addEventListener('click', function(){{
         let productQuantity = parseInt(document.getElementById("quantity").value);
@@ -68,7 +86,12 @@ addBtn.addEventListener('click', function(){{
         if (productColor.length === 0){
             alert("Veuillez choisir une couleur.");
 
-            return null;
+            return false;
+        }
+        if(productQuantity <= 0 || productQuantity > 100){
+            alert("Cette quantité n'est pas valide, la quantité doit être comprise entre 1 et 100.");
+
+            return false;
         }
         let cart = getCart();
         console.log(productColor)
@@ -85,13 +108,12 @@ addBtn.addEventListener('click', function(){{
             console.log("added to cart");
             let cartProductIndex = cart.findIndex(cartProduct => cartProduct.id === product.id && cartProduct.color === product.color && cartProduct.quantity > 0);
             cart[cartProductIndex].quantity+=product.quantity;
-        }else if(productQuantity <= 0){
-            cart = cart.filter(c => c.id != cart.id && c.color != cart.color);
         }else{
             console.log("new item");
             cart.quantity = product.quantity;
             cart.push(product);  
         }            
-        saveCart(cart);                  
+        saveCart(cart);
+        alert("Produit ajouté au panier avec succès!");                  
     }
 });
