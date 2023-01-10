@@ -260,11 +260,12 @@ orderBtn.addEventListener('click', function(event){
   })
   .then(function(value){
     console.log(value);
-    if(value.orderId){      
-      document.location.href=`http://localhost:5500/front/html/confirmation.html?orderId='${value.orderId}'`
-      
+    if(value.orderId){
+      localStorage.removeItem('cart');       
+      document.location.href=`http://localhost:5500/front/html/confirmation.html?orderId='${value.orderId}'`;     
+    }else{
+      alert("une erreur s'est produite");
     };
-    localStorage.removeItem('cart');
   })   
   .catch(function(err){
   });
